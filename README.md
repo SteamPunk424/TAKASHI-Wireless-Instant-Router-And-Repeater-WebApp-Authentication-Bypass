@@ -1,4 +1,6 @@
 #TAKASHI Wireless Instant Router And Repeater Web Application Authentication Bypass
+Software version 	    V5.07.38_AAL03
+Hardware version 	    V3.0 
 
 This vulnerability is related to how the web application handles sessions for authenticated users. The issue arises due to improper session management, allowing unauthorized users to gain admin-level access.
 
