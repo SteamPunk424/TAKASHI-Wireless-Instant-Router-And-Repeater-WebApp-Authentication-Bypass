@@ -50,7 +50,7 @@ Key Difference
 
 The key difference between the two requests is the presence of the following cookie:
 
-admin:language=en
+`admin:language=en`
 
 The Vulnerability
 
@@ -59,7 +59,7 @@ Exploit Mechanics
 
 To exploit this vulnerability, all an attacker needs to do is set the cookie admin:language with any arbitrary value. The application will trust this cookie and treat the user as an authenticated admin.
 
-admin:language=<any_value>
+`admin:language=<any_value>`
 
 Where <any_value> can be any string,text or numbers. As long as the cookie is given that name, the application will behave as if the user is authenticated.
 Conclusion
