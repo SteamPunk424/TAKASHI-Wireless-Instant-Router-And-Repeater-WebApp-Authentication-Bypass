@@ -82,11 +82,6 @@ To mitigate this issue, the following steps should be taken:
 3. **Session Expiry**: Ensure sessions expire and require re-authentication after a set period.
 4. **Cookie Integrity Checks**: Validate cookies against an active session in the backend database.
 
-## Disclosure Timeline
-- **Discovery**: [Insert Date]  
-- **Vendor Notified**: [Insert Date]  
-- **Patch Released**: [Pending/Date]  
-- **Public Disclosure**: [Insert Date]  
 
 ## References
 - [OWASP Session Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html)
