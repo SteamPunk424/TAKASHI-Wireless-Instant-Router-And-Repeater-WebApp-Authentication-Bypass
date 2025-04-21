@@ -10,8 +10,10 @@ A critical authentication bypass vulnerability has been identified in the TAKASH
 - **Hardware Version**: V3.0  
 
 ## Vulnerability Details
-The web application does not properly validate session data, allowing attackers to manipulate cookies and bypass authentication. By setting a specific cookie value, an attacker can gain admin-level access without valid credentials.
-
+Improper session management in Takashi Wireless Instant Router and
+Repeater (Model A5) firmware v5.07.38_AAL03 with hardware v3.0 allows
+unauthorized attackers to gain admin-level access via a crafted
+request.
 ## Request Comparison
 To understand how this vulnerability works, let's compare an unauthenticated request to an authenticated request.
 
