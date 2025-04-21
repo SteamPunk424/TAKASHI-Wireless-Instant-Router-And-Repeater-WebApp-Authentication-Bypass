@@ -1,4 +1,4 @@
-# TAKASHI Wireless Instant Router and Repeater - Authentication Bypass Vulnerability
+# TAKASHI Wireless Instant Router and Repeater - Authentication Bypass Vulnerability CVE-2025-29712
 
 ## Overview
 A critical authentication bypass vulnerability has been identified in the TAKASHI Wireless Instant Router and Repeater (Model A5) running firmware version **V5.07.38_AAL03** with hardware version **V3.0**. This vulnerability allows unauthorized users to gain administrative access due to improper session management.
